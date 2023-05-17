@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+	stages {
+		stage("git clone"){
+			steps {
+                // Get some code from a GitHub repository
+                git url: 'https://github.com/Vishnu4226/jenkins-terraform-test.git', branch: 'main'
+            }
+		}
+		stage("Terraform Init"){
+			steps{
+				sh "terraform init"
+			}
+		}
+		stage("Terraform Scan"){
+			steps{
+				sh "tfsec"
+			}
+		}
+		stage("Terraform Plan"){
+			steps{
+				sh "terraform plan"
+			// echo "test tf plan"
+			}
+		}
+		stage("Terraform Approval"){
+			steps{
+				input message: 'Do you want to approve the deployment?', ok: 'Yes'
+			}
+		}
+		stage("Terraform Apply or Terraform Destroy") {
+            steps {
+				sh """
+				terraform ${action} --auto-approve
+				"""
+				// terraform ${action} --target=${env.TARGET} --auto-approve
+				// echo "test tf apply"
+				echo "${TARGET}"
+			   }
+            
+        }
+    }
+}

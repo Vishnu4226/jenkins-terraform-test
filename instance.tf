@@ -6,4 +6,7 @@ resource "aws_instance" "ec2_instance" {
     metadata_options {
     http_tokens = "required"
   } 
+    root_block_device {
+      encrypted = true
+  }
 }

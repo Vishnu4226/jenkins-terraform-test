@@ -5,6 +5,7 @@ resource "aws_instance" "ec2_instance" {
     key_name = "jenkins-terraform-test"
     metadata_options {
     http_tokens = "required"
+    http_endpoint = "enabled"
   } 
     root_block_device {
       encrypted = true
